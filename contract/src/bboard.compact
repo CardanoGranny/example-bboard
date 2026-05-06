@@ -58,3 +58,5 @@ export circuit takeDown(): Opaque<"string"> {
 export circuit publicKey(sk: Bytes<32>, sequence: Bytes<32>): Bytes<32> {
   return persistentHash<Vector<3, Bytes<32>>>([pad(32, "bboard:pk:"), sequence, sk]);
 }
+// Lesson 3.2 notes: This is the bulletin board contract
+// Walking through as part of Midnight Academy
