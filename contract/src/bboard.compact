@@ -60,3 +60,24 @@ export circuit publicKey(sk: Bytes<32>, sequence: Bytes<32>): Bytes<32> {
 }
 // Lesson 3.2 notes: This is the bulletin board contract
 // Walking through as part of Midnight Academy
+
+// ============================================================
+// Lesson 3.2 Learning Notes - bboard.compact
+// ============================================================
+// This is the Midnight bulletin board smart contract.
+// Written in Compact - Midnight's smart contract language.
+//
+// What this contract does:
+// - Anyone can post ONE message at a time to the board
+// - Only the original poster can take the message down
+// - Ownership is proven using a secret key (zero-knowledge proof)
+//   NOT a wallet address - so the poster stays anonymous on-chain
+//
+// Key concepts learned:
+// - ledger fields = public data stored on the blockchain
+// - witness = secret data that stays on the user's local machine
+// - disclose() = required when writing witness-derived data to the ledger
+// - sequence counter = prevents replay attacks by changing the
+//   public key hash each time a message is taken down
+// - persistentHash = one-way function to derive a public key from secret key
+// ============================================================

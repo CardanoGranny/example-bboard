@@ -72,3 +72,21 @@ export const witnesses = {
     Uint8Array,
   ] => [privateState, privateState.secretKey],
 };
+
+// ============================================================
+// Lesson 3.2 Learning Notes - witnesses.ts
+// ============================================================
+// This is the TypeScript implementation of the witness declared
+// in bboard.compact:
+//   witness localSecretKey(): Bytes<32>;
+//
+// What this file does:
+// - BBoardPrivateState holds the user's secret key
+//   It NEVER gets sent to the blockchain
+// - The witness returns [privateState, secretKey]:
+//   - privateState is returned unchanged (the key never rotates)
+//   - secretKey is passed into the Compact circuit for hashing
+// - createBBoardPrivateState() is called when:
+//   - Deploying for the first time (generates a random 32-byte key)
+//   - Reconnecting (loads the key from encrypted local database)
+// ============================================================
