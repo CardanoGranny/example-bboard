@@ -13,6 +13,45 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// ============================================================
+// Lesson 3.3 Learning Notes - api/src/index.ts
+// ============================================================
+// This is the main API layer - the bridge between the contract
+// and the user interface (CLI or browser).
+//
+// BBoardAPI class - the four things it does:
+//   1. deploy()  - creates a new bulletin board on the network
+//   2. join()    - connects to an existing board by address
+//   3. post()    - sends a message to the blockchain
+//   4. takeDown() - removes a message from the blockchain
+//
+// Key concepts:
+// - private constructor: you cannot use "new BBoardAPI()" directly.
+//   Must go through deploy() or join() to ensure a live contract exists first.
+//
+// - state$: a live observable stream combining public ledger state
+//   (from the indexer) with private state (your secret key).
+//   Updates automatically whenever the blockchain state changes.
+//
+// - isOwner: computed by hashing your secret key + sequence number
+//   and comparing to the owner stored on-chain. No wallet signature needed.
+//
+// - callTx.post() and callTx.takeDown() trigger the full ZK flow:
+//   circuit runs locally → proof server generates proof →
+//   wallet pays fee → node submits → block confirms → await resolves
+//
+// - getPrivateState(): checks encrypted local database for existing
+//   secret key. If found, reuses it (same identity). If not, generates
+//   a fresh random key (new user).
+//
+// - deploy() always generates a fresh key.
+//   join() loads existing key or generates new one.
+//
+// Logging levels:
+//   info  = important events ("starting deployment")
+//   trace = detailed technical data for debugging ("transaction hash, block height")
+// ============================================================
+
 /**
  * Provides types and utilities for working with bulletin board contracts.
  *

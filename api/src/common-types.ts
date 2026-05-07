@@ -13,6 +13,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// ============================================================
+// Lesson 3.3 Learning Notes - common-types.ts
+// ============================================================
+// This file defines the vocabulary (types) used across the API layer.
+// No logic runs here - it just gives names to things.
+//
+// Key types explained:
+// - bboardPrivateStateKey: the label used to find your secret key
+//   in the encrypted local database (like a filing cabinet label)
+//
+// - PrivateStates: describes what's in the filing cabinet.
+//   One drawer per contract type in your DApp.
+//
+// - BBoardContract: the contract wired up with private state + witnesses
+// - BBoardCircuitKeys: the names of circuits that change state ('post', 'takeDown')
+// - BBoardProviders: all connections needed (proof server, indexer, wallet, etc.)
+// - DeployedBBoardContract: a contract that is live on the network with an address
+//
+// - BBoardDerivedState: the clean combined view the UI reads:
+//     state    = VACANT or OCCUPIED
+//     sequence = which round we are on
+//     message  = what the board says (undefined if empty)
+//     isOwner  = did YOU post this message?
+// ============================================================
+
 /**
  * Bulletin board common types and abstractions.
  *
