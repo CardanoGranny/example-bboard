@@ -1,277 +1,124 @@
-# Bulletin Board DApp
+🌙 Midnight Bulletin Board — Cardano Granny's Journey
+
+👩‍💻 Who Am I?
+I'm Cardano Granny. I've been online since the Prodigy days, wrote a little BASIC back in the mid-80s, and have been following crypto since early 2017. My professional background has always been in the beauty industry — not computers — but I've never been afraid of technology or intimidated by learning something new.
+When Midnight Network came along with its promise of privacy-preserving blockchain technology, I decided to dive in headfirst through the Midnight Academy. I had never written a real line of code before starting these lessons. I used AI assistance along the way and I'm not embarrassed to say so — knowing how to learn with the tools available to you is a skill in itself.
+If you're reading this and think you're too old or too far outside the tech world to understand any of this — I hope this repository changes your mind.
+
+📖 What Is This Repository?
+This is my working copy of the Midnight Bulletin Board (bboard) example — a complete, privacy-preserving decentralized application built on the Midnight Network.
+I worked through this project as part of the Midnight Academy Lessons 3.1 through 3.4, learning about:
+
+🔐 Zero Knowledge (ZK) proofs and what they actually mean in practice
+📝 The Compact smart contract language
+🏗️ How a real DApp is structured in layers (contract, API, CLI)
+🌙 How Midnight protects your identity while keeping messages public
+
+
+🧱 What The Bulletin Board Does
+The bulletin board lets anyone post a public message — but only the original poster can take it down, and they prove ownership without ever revealing who they are.
+This is selective disclosure in action:
+What Everyone SeesWhat Only You KnowThe message itselfYour secret keyA hash of your public keyThat the hash came from YOUThe board state (occupied/vacant)Your identity
+The magic is that the network can verify you are the owner without learning anything about you. That's a Zero Knowledge proof.
+
+🗺️ The Three Layers I Studied
+Layer 1 — The Contract (Lesson 3.1)
+Written in Compact, Midnight's privacy-focused smart contract language. It defines:
 
-This project is built on the [Midnight Network](https://midnight.network/).
+The board's state (VACANT or OCCUPIED)
+Two circuits: post and takeDown
+A witness-based identity system using secret keys and public key hashes
+Replay protection using a sequence number
 
-[![Generic badge](https://img.shields.io/badge/Compact%20Compiler-0.30.0-1abc9c.svg)](https://shields.io/)
-[![Generic badge](https://img.shields.io/badge/TypeScript-5.9.3-blue.svg)](https://shields.io/)
+Layer 2 — The API (Lesson 3.2)
+A TypeScript layer built with RxJS that:
 
+Connects all the infrastructure pieces together
+Observes on-chain state changes in real time
+Exposes deploy(), join(), post(), and takeDown() methods
 
-> **Use this repo as a template. Do not fork it.**
->  
-> This repository is intended to be used via GitHub’s “Use this template” flow.  
-> Forking this repo is discouraged, as forks are not tracked as independent projects.
+Layer 3 — The CLI (Lesson 3.3)
+An interactive command-line application that:
 
-A Midnight smart contract example demonstrating a simple one-item bulletin board with zero-knowledge proofs on testnet. Users can post a single message at a time, and only the message author can remove it.
+Creates and manages wallets
+Generates DUST (the shielded fee token)
+Provides a menu for interacting with the bulletin board
 
-## Project Structure
 
-```
-bulletin-board/
-├── contract/               # Smart contract in Compact language
-│   └── src/               # Contract source and utilities
-├── api/                   # Methods, classes and types for CLI and UI
-├── bboard-cli/            # Command-line interface
-│   └── src/               # CLI implementation
-└── bboard-ui/             # Web browser interface
-    └── src/               # Web UI implementation
-```
+🚀 What I Actually Did (Lesson 3.4)
+I ran the complete end-to-end lifecycle of the DApp:
 
-## Prerequisites
+✅ Compiled the Compact contract into ZK circuits
+✅ Built the CLI infrastructure
+✅ Started all four services (node, indexer, proof server, faucet)
+✅ Created a wallet with the genesis seed
+✅ Deployed a bulletin board contract to the local network
+✅ Posted a message: "Hello from Cardano Granny on Midnight!"
+✅ Viewed the three different state perspectives (ledger, private, derived)
+✅ Took down the message and watched the sequence number increment
 
-### 1. Node.js Version Check
+The Three State Views In Action
+When I posted my message, here is what each view showed:
+Option 3 — Ledger State (what everyone sees):
+Current state is: 'occupied'
+Current message is: 'Hello from Cardano Granny on Midnight!'
+Current sequence is: 1
+Current owner is: '8e9c65e788747e29ca36da48f5add2b2bef0d1488601a5199314c4091dcc619d'
+Option 4 — Private State (what only I know):
+Current secret key is: [private — never shared publicly]
+Option 5 — Derived State (the combined view):
+Current state is: 'occupied'
+Current message is: 'Hello from Cardano Granny on Midnight!'
+Current sequence is: 1
+Current owner is: 'you'
+The public sees a hash. I see 'you'. Nobody can reverse the hash to find me. That's privacy-preserving technology working in real life.
 
-You need Node.js:
+💡 What I Learned About Zero Knowledge Proofs
+Before this course, ZK proofs sounded like science fiction. Now I understand them in plain English:
 
-```bash
-node --version
-```
+A Zero Knowledge proof lets you prove you know something without revealing what it is.
 
-Expected output: `v24.11.1` or higher. The repository includes an [.nvmrc](./.nvmrc) pinned to `24.11.1`.
+In the bulletin board:
 
-If you get a lower version: [Install Node.js LTS](https://nodejs.org/).
+My secret key never touches the blockchain
+The network only sees a mathematical hash derived from my key
+A ZK proof confirms I ran the circuit correctly, without revealing my key
+Even if someone sees my public key hash, they cannot work backwards to find me
 
-### 2. Docker Installation
+It's like proving you know the combination to a safe without opening the safe or saying the numbers out loud.
 
-The [proof server](https://docs.midnight.network/develop/tutorial/using/proof-server) runs in Docker and is required for both CLI and UI to generate zero-knowledge proofs:
+🐛 My Contribution to the Midnight Community
+While working through this lesson, I discovered that both the preprod-remote and standalone modes were failing with Wallet.Sync errors due to outdated Docker image versions.
+I reported this issue in the Midnight Discord #dev-chat, where moderator norm [MDNT] confirmed he could reproduce it and escalated it to the development team.
+This led directly to Pull Request #1441 being created, reviewed, and merged:
+👉 fix: bump versions #1441
+The fix updated two Docker images:
 
-```bash
-docker --version
-```
+indexer-standalone: 3.0.0 → 4.0.1
+midnight-node: 0.20.1 → 0.22.3
 
-Expected output: `Docker version X.X.X`.
+I may be new to coding, but I was able to contribute to the Midnight developer community by simply doing the work and reporting what I found. 😊
 
-If Docker is not found: [Install Docker Desktop](https://docs.docker.com/desktop/). Make sure Docker Desktop is running.
+🔮 Where I'm Going Next
+This is just the beginning. My long-term goal is to build VaultBeauty — a privacy-preserving application on the Midnight Network for the beauty industry. Through projects like this bulletin board, I am learning the patterns and building the understanding I need to make that vision real.
+One lesson at a time. One block at a time. 🌙
 
-### 3. Lace Wallet Extension (UI Only)
+🛠️ How To Run This Yourself
+Prerequisites
 
-For the web interface, install the official Lace wallet extension on [Chrome Store](https://chromewebstore.google.com/detail/lace/gafhhkghbfjjkeiendhlofajokpaflmk) or the [Edge Store](https://microsoftedge.microsoft.com/addons/detail/lace/efeiemlfnahiidnjglmehaihacglceia) (tested with version 1.36.0).
+Node.js LTS (v24.11.1 or higher)
+Docker Desktop
+WSL2 (if on Windows)
 
-After installing, set up the Midnight wallet:
+Steps
+Clone the repository and navigate into it, then install dependencies with npm install. Compile the contract by running npm install, npm run compact, and npm run build inside the contract folder. Then build and run the CLI from the bboard-cli folder with npm install, npm run build, and npm run standalone. When the menu appears, choose option 1 to deploy a fresh bulletin board!
 
-1. Create a **new wallet** — Midnight will appear as a network option
-2. Set **Network** to **Preprod**
-3. Set **Proof server** to **Local (http://localhost:6300)** — this must point to your local proof server started via Docker
-4. Click **Enter Wallet**
-5. Fund your wallet with tNIGHT tokens from the [Preprod Faucet](https://faucet.preprod.midnight.network/)
-6. Go to **Tokens** in the wallet, click **Generate tDUST**, and confirm the transaction — tDUST tokens are required to pay transaction fees on preprod
+🙏 Acknowledgements
 
-## Setup Instructions
+The Midnight Network team for building this technology and maintaining excellent documentation
+norm [MDNT] and JAlbertCode for their quick response to my bug report
+Claude (Anthropic) for patient, step-by-step guidance through every lesson
+The Midnight Discord community for being welcoming to someone coming at this from a completely different background
 
-### Install Project Dependencies
 
-```bash
-npm install
-```
-
-This repository uses npm workspaces. Run installation once from the repository root.
-
-### Compile the Smart Contract
-
-The Compact compiler (`compactc 0.30.0`) generates TypeScript bindings and zero-knowledge circuits from the smart contract source code:
-
-```bash
-cd contract
-npm run compact    # Compiles the Compact contract
-npm run build      # Copies compiled files to dist/
-cd ..
-```
-
-Expected output:
-
-```
-> compact
-> compact compile src/bboard.compact ./src/managed/bboard
-
-Compiling 2 circuits:
-  circuit "post" (k=14, rows=10070)
-  circuit "takeDown" (k=14, rows=10087)
-
-> build
-> rm -rf dist && tsc --project tsconfig.build.json && cp -Rf ./src/managed ./dist/managed && cp ./src/bboard.compact ./dist
-
-```
-
-### Build the CLI Interface
-
-```bash
-cd bboard-cli
-npm run build
-cd ..
-```
-
-### Build the UI Interface (Optional)
-
-Only needed if you want to use the web interface:
-
-```bash
-cd bboard-ui
-npm run build
-cd ..
-```
-
-## Option 1: CLI Interface
-
-### Start the Proof Server
-
-The CLI requires a local proof server running in Docker:
-
-```bash
-cd bboard-cli
-docker compose -f proof-server-local.yml up -d
-```
-
-This uses `midnightntwrk/proof-server:8.0.3` on `http://127.0.0.1:6300`.
-
-### Run the CLI
-
-```bash
-# For preprod network
-npm run preprod-remote
-
-# For preview network
-npm run preview-remote
-```
-
-### Using the CLI
-
-#### Create a Wallet
-
-1. Choose option `1` to build a fresh wallet
-2. The system will generate a wallet address and seed
-3. **Save both the address and seed** - you'll need them later
-
-Expected output is similar to:
-
-```
-Your wallet seed is: [64-character hex string]
-Using unshielded address: mn_addr_preprod1hdvtst70zfgd8wvh7l8ppp7mcrxnjn56wc5hlxpwflz3fxdykaesrw0ln4 waiting for funds...
-```
-
-#### Fund Your Wallet
-
-Before deploying contracts, you need testnet tokens.
-
-1. Copy your wallet address from the output above
-2. Visit the [faucet](https://faucet.preprod.midnight.network/)
-3. Paste your address and request funds
-4. Wait for the CLI to detect the funds (takes 2-3 minutes)
-
-Expected output after funding is similar to:
-
-```
-Your NIGHT wallet balance is: 1000000000
-```
-
-#### Deploy Your Contract
-
-1. Choose the contract deployment option
-2. Wait for deployment (takes ~30 seconds)
-3. **Save the contract address** for future use
-
-Expected output:
-
-```
-Deployed bulletin board contract at address: [contract address]
-```
-
-#### Use the Bulletin Board
-
-You can now:
-
-- **Post** a message to the bulletin board
-- **View** the current message
-- **Remove** your message (only if you posted it)
-- **Exit** when done
-
-Each action creates a real transaction on Midnight Testnet using zero-knowledge proofs generated by the proof server.
-
-## Option 2: Web UI Interface
-
-The web interface uses the same proof server and requires additional browser setup.
-
-### Start the Proof Server (if not already running)
-
-If you haven't started the proof server for the CLI, start it now:
-
-```bash
-cd bboard-cli
-docker compose -f proof-server-local.yml up -d
-cd ..
-```
-
-Verify it's running:
-
-```bash
-docker ps
-```
-
-### Start the Web Interface
-
-The UI can run against preprod or preview networks:
-
-```bash
-cd bboard-ui
-
-# For preprod network
-npm run build:start
-
-# For preview network
-npm run build:start:preview
-```
-
-The UI will be available at:
-
-- http://127.0.0.1:8080
-
-### Browser Setup
-
-1. **Open the UI URL** in a browser with Lace wallet extension installed
-2. **Set up Lace wallet** if it's your first time
-3. **Authorize the application** when Lace wallet prompts
-4. Use the bulletin board web interface
-
-## Useful Links
-
-- Get Testnet tNIGHT on [Preprod Faucet](https://faucet.preprod.midnight.network/) or [Preview Faucet](https://faucet.preview.midnight.network/)
-- [Midnight Documentation](https://docs.midnight.network/examples/dapps/bboard) - Complete developer guide
-- [Compatibility Matrix](https://docs.midnight.network/relnotes/support-matrix) - Current supported Midnight component versions
-- [Compact Language Guide](https://docs.midnight.network/compact/writing) - Smart contract language reference
-- Get Lace wallet on the [Chrome Store](https://chromewebstore.google.com/detail/lace/gafhhkghbfjjkeiendhlofajokpaflmk) or the [Edge Store](https://microsoftedge.microsoft.com/addons/detail/lace/efeiemlfnahiidnjglmehaihacglceia)
-
-## Troubleshooting
-
-| Common Issue                       | Solution                                                                                                  |
-| ---------------------------------- |-----------------------------------------------------------------------------------------------------------|
-| `npm install` fails                | Ensure you're using Node `v24.11.1` or newer. Older Node versions can install with warnings but are not the target runtime |
-| Contract compilation fails         | Ensure the Compact toolchain is installed and run `npm run compact` from `contract/`                      |
-| Network connection timeout         | CLI requires internet connection, restart if connection times out                                         |
-| Token funding takes too long       | Wait 1-2 minutes, funding is automatic in CLI                                                             |
-| "Application not authorized" error | Start proof server: `docker compose -f proof-server-local.yml up -d`                                      |
-| Lace wallet not detected           | Install Lace wallet browser extension and refresh page                                                    |
-| Docker issues                      | Ensure Docker Desktop is running, check `docker --version`                                                |
-| Port 6300 in use                   | Run `docker compose down` then restart services                                                           |
-| Dependencies won't install         | Use Node.js LTS version. For older npm versions, you may need `--legacy-peer-deps`                        |
-| Contract deployment fails          | Verify wallet has sufficient balance and network connection                                               |
-
-## Notes
-
-- CLI and UI can run simultaneously and share the same proof server
-- Proof server (Docker) is required for both CLI and UI to generate zero-knowledge proofs
-- Contract must be compiled before building CLI or UI
-- Fund your wallet using the testnet faucet before deploying contracts
-
-## Implementation Notes
-
-- **Transaction fee configuration**  
-  The default `additionalFeeOverhead` value (`500_000_000_000_000_000n`) from `@midnight-ntwrk/testkit-js` is required on the `undeployed` network. Lower values can fail with `BalanceCheckOverspend` on the node side. On remote networks, that overhead requires too much dust, so the CLI overrides it to `1_000n`.
-- CLI private state is stored per contract address, matching the `Midnight.js 4.x` private-state provider model.
+Cardano Granny — Rimrock, Arizona — May 2026 🌵🌙
